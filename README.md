@@ -11,7 +11,7 @@ The pipeline extracts structural anomalies (e.g., Virtual/Raw size mismatches, h
 ## Repository Structure
 ```text
 Aegis-ML/
-├── data/                  # (Ignored in Git) Raw .exe files
+├── data/                  # (Ignored in Git) Raw .exe files (not included on github because I choose it not to be)
 │   ├── malware/           # Malware samples (e.g., Trojan, Ransomware)
 │   └── benign/            # Clean Windows executables
 ├── src/

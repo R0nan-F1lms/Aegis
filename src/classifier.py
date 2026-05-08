@@ -8,13 +8,9 @@ from sklearn.svm import SVC
 from sklearn.metrics import (accuracy_score, confusion_matrix, ConfusionMatrixDisplay, 
                              roc_curve, auc, precision_recall_curve, average_precision_score)
 
-# ==========================================
-# FILE: classifier.py
-# PURPOSE: Machine Learning Classification Pipeline for Aegis-ML
-# ==========================================
 
+# Loads the CSV and prepares the feature matrix (X) and labels (y)."""
 def prepare_data(csv_path):
-    """Loads the CSV and prepares the feature matrix (X) and labels (y)."""
     print(f"[*] Loading dataset from {csv_path}...")
     df = pd.read_csv(csv_path)
 
@@ -33,7 +29,6 @@ def prepare_data(csv_path):
     return X, y
 
 def plot_and_save_roc(y_test, y_probs, model_name, output_dir):
-    """Generates and saves the Receiver Operating Characteristic (ROC) curve."""
     fpr, tpr, _ = roc_curve(y_test, y_probs)
     roc_auc = auc(fpr, tpr)
 
@@ -52,7 +47,7 @@ def plot_and_save_roc(y_test, y_probs, model_name, output_dir):
     plt.close()
 
 def plot_and_save_pr(y_test, y_probs, model_name, output_dir):
-    """Generates and saves the Precision-Recall curve."""
+
     precision, recall, _ = precision_recall_curve(y_test, y_probs)
     avg_precision = average_precision_score(y_test, y_probs)
 
@@ -68,7 +63,6 @@ def plot_and_save_pr(y_test, y_probs, model_name, output_dir):
     plt.close()
 
 def plot_and_save_confusion_matrix(model, X_test, y_test, model_name, output_dir):
-    """Generates and saves the Confusion Matrix."""
     # We display 'Benign' and 'Malware' instead of 0 and 1 for readability in the report
     disp = ConfusionMatrixDisplay.from_estimator(
         model, X_test, y_test, 

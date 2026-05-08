@@ -9,10 +9,6 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.feature_selection import SequentialFeatureSelector
 
-# ==========================================
-# FILE: selector.py
-# PURPOSE: Dimensionality Reduction & Feature Selection
-# ==========================================
 
 def load_and_prepare_data(csv_path):
     print(f"[*] Loading dataset from {csv_path}...")
@@ -22,8 +18,8 @@ def load_and_prepare_data(csv_path):
     y = df['Is_Malware']
     return X, y
 
+# Trains 3 models on a specific feature set and returns their accuracies.
 def evaluate_models(X_train, X_test, y_train, y_test, feature_set_name):
-    """Trains 3 models on a specific feature set and returns their accuracies."""
     models = {
         "Decision Tree": DecisionTreeClassifier(random_state=42),
         "Random Forest": RandomForestClassifier(n_estimators=100, random_state=42),
@@ -54,9 +50,6 @@ def main():
     # Base Train/Test Split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # ---------------------------------------------------------
-    # STEP 1: Model-Based Feature Selection (Scoring)
-    # ---------------------------------------------------------
     print("\n[*] Running Model-Based Selection (Random Forest) to calculate feature scores...")
     rf_selector = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
     rf_selector.fit(X_train, y_train)
@@ -83,9 +76,6 @@ def main():
         X_test_reduced = X_test.iloc[:, selected_indices]
         evaluate_models(X_train_reduced, X_test_reduced, y_train, y_test, set_name)
 
-    # ---------------------------------------------------------
-    # STEP 2: Sequential Feature Selection (SFS)
-    # ---------------------------------------------------------
     print("\n[*] Starting Sequential Feature Selection (SFS)...")
     print("    (Running SFS on the Top 50 pool to find the absolute best 10)")
     

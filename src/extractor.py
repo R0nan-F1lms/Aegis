@@ -3,16 +3,12 @@ import os
 import csv
 import math
 
-# ==========================================
-# FILE: extractor.py
-# PURPOSE: Static Feature Extraction Pipeline for Aegis
-# ==========================================
 
 # Define standard section names to detect anomalies
 STANDARD_NAMES = ['.text', '.data', '.rdata', '.idata', '.edata', '.pdata', '.rsrc', '.bss', '.reloc']
 
+# Calculates the Shannon entropy of a byte sequence
 def calculate_entropy(data_bytes):
-    """Calculates the Shannon entropy of a byte sequence."""
     if not data_bytes:
         return 0.0
     entropy = 0
@@ -28,19 +24,17 @@ def calculate_entropy(data_bytes):
             entropy -= probability * math.log(probability, 2)
     return entropy
 
+# Checks if a section name is standard, stripping null bytes.
 def is_section_name_standard(name):
-    """Checks if a section name is standard, stripping null bytes."""
     clean_name = name.decode('utf-8', 'ignore').strip('\x00')
     return clean_name.lower() in STANDARD_NAMES
 
 def detect_packing(entropy, weird_name_count):
-    """Heuristic: High entropy or weird section names often mean packed/encrypted."""
     if entropy > 7.0 or weird_name_count > 0:
         return 1
     return 0
-
+# Extracts structural and import features from a single PE file.
 def extract_features_from_pe(file_path, class_label):
-    """Extracts structural and import features from a single PE file."""
     features = {}
     
     try:
@@ -142,9 +136,6 @@ def main():
     else:
          print(f"[-] Directory not found: {benign_dir}. Please create it and add samples.")
 
-    # ---------------------------------------------------------
-    # CSV GENERATION: Dynamic Column Mapping
-    # ---------------------------------------------------------
     print("\n[*] Structuring Feature Matrix...")
     if not all_extracted_data:
         print("[-] No data extracted. Exiting.")

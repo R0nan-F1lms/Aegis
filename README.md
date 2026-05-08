@@ -22,3 +22,41 @@ Aegis-ML/
 │   ├── features.csv       # The extracted binary dataset
 │   └── matrices/          # Generated ROC, PR, and Confusion Matrix graphs
 └── README.md
+
+## Prerequisites & Installation
+Ensure you are running Python 3.8+ and install the required data science and reverse engineering libraries:
+
+
+```bash
+pip install pefile pandas scikit-learn matplotlib```
+
+*Note: For the execution of extractor.py, it is highly recommended to run the script within an isolated, air-gapped Virtual Machine (e.g., FLARE VM) to ensure host safety while parsing live malware samples.*
+
+## Pipeline Execution Guide
+**Feature Extraction**
+The extraction script safely parses the PE headers of all files in the `/data/` directory, calculates Shannon Entropy, checks for packing indicators, and outputs a binary matrix.
+
+```bash
+python src/extractor.py```
+
+**Output:** `output/features.csv` (Contains all samples with their extracted features and class labels).
+
+**Classification Training**
+Trains three separate supervised learning models (Decision Tree, Random Forest, Support Vector Machine) using an 80/20 train-test split.
+
+
+```bash
+python src/classifier.py```
+
+**Output:** Console accuracy metrics and performance graphs (ROC Curves, Precision-Recall Curves, Confusion Matrices) saved to `output/matrices/`.
+
+**Dimensionality Reduction & Feature Selection**
+Optimises the engine by identifying the most critical malware indicators, proving high accuracy can be maintained while discarding over 99% of the dataset's features.
+
+
+```bash
+python src/selector.py```
+
+**Output:** 1. Ranks the Top 10 most important features using a Model-based approach.
+2. Evaluates the models against reduced datasets (Top 100, 50, 20).
+3. Executes Sequential Feature Selection (SFS) to isolate the definitive Top 10 features for an ultra-lightweight detection baseline.

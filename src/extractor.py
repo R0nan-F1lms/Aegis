@@ -5,7 +5,7 @@ import math
 
 # ==========================================
 # FILE: extractor.py
-# PURPOSE: Static Feature Extraction Pipeline for Aegis-ML
+# PURPOSE: Static Feature Extraction Pipeline for Aegis
 # ==========================================
 
 # Define standard section names to detect anomalies
@@ -47,7 +47,6 @@ def extract_features_from_pe(file_path, class_label):
         pe = pefile.PE(file_path)
         
         # 1. Base Class Label
-        # Note: We use 'Malware Class Name' to match the PDF brief exactly
         features['Malware Class Name'] = class_label
         
         # 2. Structural Features
@@ -58,7 +57,7 @@ def extract_features_from_pe(file_path, class_label):
         
         for section in pe.sections:
             # Check for size mismatches (Virtual Size vs Raw Size)
-            # A common heuristic is checking if Virtual Size is significantly larger
+            
             virtual_size = section.Misc_VirtualSize
             raw_size = section.SizeOfRawData
             # If the difference is greater than 1024 bytes, flag it as a mismatch
@@ -105,7 +104,6 @@ def extract_features_from_pe(file_path, class_label):
 
 def main():
     # Define paths relative to where the script is executed
-    # Ensure you are running this from the root 'Aegis-ML' directory
     malware_dir = os.path.join("data", "malware")
     benign_dir = os.path.join("data", "benign")
     output_csv = os.path.join("output", "features.csv")
@@ -156,8 +154,7 @@ def main():
     all_columns = set()
     for data_row in all_extracted_data:
         all_columns.update(data_row.keys())
-        
-    # Ensure 'Malware Class Name' is the last column to match assignment specifications
+
     all_columns.discard('Malware Class Name')
     sorted_columns = sorted(list(all_columns))
     sorted_columns.append('Malware Class Name')
